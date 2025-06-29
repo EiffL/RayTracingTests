@@ -78,7 +78,7 @@ def run_full_dorian_raytrace():
     print(f"Using {len(lightcone_table)} shells with {z_min} < z < {z_source}")
 
     # Load and prepare shells
-    target_nside = 128
+    target_nside = 256
     shells = []
     shell_distances = []
     
@@ -118,7 +118,7 @@ def run_full_dorian_raytrace():
         )
         
         # Compute raytraced convergence
-        kappa_raytraced = (A_final[0, 0] + A_final[1, 1]) / 2 - 1
+        kappa_raytraced = 1 - (A_final[0, 0] + A_final[1, 1]) / 2
         
         print(f"\n=== SUCCESS! ===")
         print(f"Born RMS: {np.sqrt(np.mean(kappa_born**2)):.6f}")
