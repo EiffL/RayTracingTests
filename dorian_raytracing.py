@@ -112,16 +112,11 @@ def raytrace(
     # Iterate over the lens planes
     for k in range(sh_start, len(contributing_shells)):
         t0 = time.time()
-        print(f"*"*73, flush=True)
-        print(f"Working on lens plane {k+1} of {len(contributing_shells)}")
-        print("Computing convergence...", flush=True)
         # Get shell information
         shell_info = contributing_shells[k]
         z_k = shell_info['redshift']
         d_k = shell_info['distance']
         shell_data = shell_info['shell_data']
-        
-        print(f"  z_k = {z_k:.3f}, d_k = {d_k:.1f} Mpc")
 
         # Load the mass and compute Sigma ((1e10 M_sun/h)/sr)
         Sigma = shell_data / (4 * np.pi / npix)
@@ -131,20 +126,16 @@ def raytrace(
 
         # Compute convergence at the single lens plane
         kappa = kappa_fac * (1 + z_k) * (1 / d_k) * (Sigma - Sigma_mean)
-        print(f"took {round(time.time()-t0,1)} s")
 
         # Compute quantities in spherical harmonics domain
         t0 = time.time()
-        print("Computing quantities in spherical harmonics domain...", flush=True)
         kappa_lm = hp.map2alm(kappa, pol=False, lmax=lmax)
         alpha_lm = hp.almxfl(kappa_lm, -2 / (np.sqrt((ell * (ell + 1)))))
         f_l = -np.sqrt((ell + 2.0) * (ell - 1.0) / (ell * (ell + 1.0)))
         g_lm_E = hp.almxfl(kappa_lm, f_l)
-        print(f"took {round(time.time()-t0,1)} s")
 
         # Evaluate alpha and U at desired angular positions: alpha(beta_k)
         t0 = time.time()
-        print("Evaluating alpha and U at ray positions...", flush=True)
 
         if interp in ["ngp", "bilinear"]:
             alpha = hp.alm2map_spin(
@@ -182,11 +173,8 @@ def raytrace(
             U[0][1] = U[1][0]
             U[1][1] = kappa_nufft - g1
 
-        print(f"took {round(time.time()-t0,1)} s")
-
         # Propagate every ray
         t0 = time.time()
-        print("Propagating ray angular positions...", flush=True)
         
         # Compute distance of previous and next shell
         d_km1 = 0 if k==0 else contributing_shells[k-1]['distance']
@@ -207,11 +195,8 @@ def raytrace(
         # Make sure that all phi of beta[1] are in range [0, 2*pi]
         beta[1][1] %= 2 * np.pi
 
-        print(f"took {round(time.time()-t0,1)} s")
-
         # Propagate Distortion matrix for exery ray
         t0 = time.time()
-        print("Propagating distortion matrix...", flush=True)
 
         for i in range(2):
             for j in range(2):
@@ -224,12 +209,9 @@ def raytrace(
         # Update distortion matrix
         A[[0, 1], ...] = A[[1, 0], ...]
 
-        print(f"took {round(time.time()-t0,1)} s")
-
         # Parallel transport distortion matrix
         if parallel_transport:
             t0 = time.time()
-            print("Parallel transporting distortion matrix...", flush=True)
 
             cospsi, sinpsi = get_rotation_angle_array(
                 beta[0][0][:], beta[0][1][:], beta[1][0][:], beta[1][1][:]
@@ -237,15 +219,12 @@ def raytrace(
             A[0, :, :, :] = rotate_tensor_array(A[0, :, :, :], cospsi, sinpsi)
             A[1, :, :, :] = rotate_tensor_array(A[1, :, :, :], cospsi, sinpsi)
 
-            print(f"took {round(time.time()-t0,1)} s")
-
         # Compute Born approximation convergence
         kappa_born += ((d_s - d_k) / d_s) * kappa
 
         # If there is not enough time for other 1.5 iterations, write restart file
         elapsed_sec = time.time() - t_begin
         estim_sec_per_iter = elapsed_sec / (k - sh_start + 1)
-        print(f"Estimated seconds per iteration: {estim_sec_per_iter}")
 
     # Save data
     print(f"*"*73, flush=True)
