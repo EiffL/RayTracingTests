@@ -18,15 +18,15 @@ c_cgs = 2.998e10      # speed of light in cgs
 G_cgs = 6.674e-8      # gravitational constant in cgs
 
 def calculate_particle_mass(box_size_mpc_h=1250.0, n_particles=1080**3, omega_m=0.29, h=0.67):
-    """Calculate particle mass in M_sun"""
-    rho_crit_h2 = 2.775e11  # M_sun/Mpc^3
-    rho_crit = rho_crit_h2 * h**2
-    rho_matter = omega_m * rho_crit
-    volume_mpc3 = (box_size_mpc_h / h)**3
-    total_mass = rho_matter * volume_mpc3
+    """Calculate particle mass in M_sun using comoving approach"""
+    # Use comoving approach since simulation uses comoving coordinates
+    rho_crit_h2 = 2.775e11  # M_sun/Mpc^3 (for h^2)
+    rho_matter_comoving = omega_m * rho_crit_h2  # M_sun/(Mpc/h)^3 in comoving coordinates
+    volume_comoving = box_size_mpc_h**3  # (Mpc/h)^3 - already in comoving units
+    total_mass = rho_matter_comoving * volume_comoving
     particle_mass = total_mass / n_particles
     
-    print(f"Particle mass: {particle_mass:.2e} M_sun = {particle_mass/1e10:.3f} × 10^10 M_sun")
+    print(f"Particle mass (comoving): {particle_mass:.2e} M_sun = {particle_mass/1e10:.3f} × 10^10 M_sun")
     return particle_mass
 
 def comoving_distance_simple(z, omega_m=0.29, omega_l=0.71, h=0.67):

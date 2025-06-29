@@ -33,13 +33,13 @@ class PowerSpectrumAnalyzer:
     def _setup_cosmology(self):
         """Set up jax-cosmo cosmology matching simulation parameters."""
         cosmo_params = {
-            'Omega_c': 0.29 - 0.05,  # CDM density (total matter - baryons)
+            'Omega_c': 0.29004048373206326 - 0.05,  # CDM density (total matter - baryons)
             'Omega_b': 0.05,         # Baryon density
             'Omega_k': 0.0,          # Curvature (flat universe)
-            'h': 0.667,              # Hubble parameter
-            'sigma8': 0.77,          # Matter fluctuation amplitude
-            'n_s': 0.95,             # Spectral index
-            'w0': -1.0,              # Dark energy EoS
+            'h': 0.6673620556416257, # Hubble parameter (exact from control.par)
+            'sigma8': 0.7657514028877632,  # Matter fluctuation amplitude (exact from control.par)
+            'n_s': 0.9496515440005885,     # Spectral index (exact from control.par)
+            'w0': -1.008941472576396,      # Dark energy EoS (calculated from control.par)
             'wa': 0.0                # Dark energy EoS evolution
         }
         
