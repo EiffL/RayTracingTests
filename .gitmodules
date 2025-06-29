@@ -1,0 +1,3 @@
+[submodule "extern/dorian"]
+	path = extern/dorian
+	url = https://gitlab.mpcdf.mpg.de/fferlito/dorian.git

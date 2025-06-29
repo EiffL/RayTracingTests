@@ -1,0 +1,9 @@
+numpy
+scipy
+healpy
+h5py
+ducc0
+matplotlib
+dorian-astro
+jax
+jax-cosmo
