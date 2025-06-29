@@ -8,3 +8,7 @@ dorian-astro
 jax
 jax-cosmo
 tqdm
+glass
+camb
+cosmology.compat.camb
+glass.ext.camb

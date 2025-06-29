@@ -1,3 +1,6 @@
 [submodule "extern/dorian"]
 	path = extern/dorian
 	url = https://gitlab.mpcdf.mpg.de/fferlito/dorian.git
+[submodule "extern/glass"]
+	path = extern/glass
+	url = https://github.com/glass-dev/glass.git
