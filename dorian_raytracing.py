@@ -128,14 +128,10 @@ def raytrace(
         kappa = kappa_fac * (1 + z_k) * (1 / d_k) * (Sigma - Sigma_mean)
 
         # Compute quantities in spherical harmonics domain
-        t0 = time.time()
         kappa_lm = hp.map2alm(kappa, pol=False, lmax=lmax)
         alpha_lm = hp.almxfl(kappa_lm, -2 / (np.sqrt((ell * (ell + 1)))))
         f_l = -np.sqrt((ell + 2.0) * (ell - 1.0) / (ell * (ell + 1.0)))
         g_lm_E = hp.almxfl(kappa_lm, f_l)
-
-        # Evaluate alpha and U at desired angular positions: alpha(beta_k)
-        t0 = time.time()
 
         if interp in ["ngp", "bilinear"]:
             alpha = hp.alm2map_spin(
@@ -173,9 +169,6 @@ def raytrace(
             U[0][1] = U[1][0]
             U[1][1] = kappa_nufft - g1
 
-        # Propagate every ray
-        t0 = time.time()
-        
         # Compute distance of previous and next shell
         d_km1 = 0 if k==0 else contributing_shells[k-1]['distance']
         d_kp1 = d_s if k == len(contributing_shells) - 1 else contributing_shells[k+1]['distance']
@@ -195,9 +188,6 @@ def raytrace(
         # Make sure that all phi of beta[1] are in range [0, 2*pi]
         beta[1][1] %= 2 * np.pi
 
-        # Propagate Distortion matrix for exery ray
-        t0 = time.time()
-
         for i in range(2):
             for j in range(2):
                 A[0][i][j] = (
@@ -211,7 +201,6 @@ def raytrace(
 
         # Parallel transport distortion matrix
         if parallel_transport:
-            t0 = time.time()
 
             cospsi, sinpsi = get_rotation_angle_array(
                 beta[0][0][:], beta[0][1][:], beta[1][0][:], beta[1][1][:]
@@ -221,10 +210,6 @@ def raytrace(
 
         # Compute Born approximation convergence
         kappa_born += ((d_s - d_k) / d_s) * kappa
-
-        # If there is not enough time for other 1.5 iterations, write restart file
-        elapsed_sec = time.time() - t_begin
-        estim_sec_per_iter = elapsed_sec / (k - sh_start + 1)
 
     # Save data
     print(f"*"*73, flush=True)
