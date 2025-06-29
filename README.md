@@ -89,7 +89,7 @@ RayTracingTests/
 
 ## Results Notebook
 
-**👉 See [`notebooks/analysis.ipynb`](notebooks/analysis.ipynb) for complete analysis and visualizations**
+**👉 See [`results.ipynb`](results.ipynb) for complete analysis and visualizations**
 
 The results notebook contains:
 - **Convergence Maps**: Full-sky and zoomed visualizations at nside=256 resolution
