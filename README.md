@@ -11,13 +11,6 @@ This repository tests the impact of different ray tracing strategies on weak len
 
 The analysis uses high-resolution N-body simulation data to generate convergence maps and compare their statistical properties through power spectrum analysis.
 
-## Key Results
-
-Our analysis reveals:
-- **Large-scale agreement**: Both methods show excellent agreement at large angular scales (low ℓ)
-- **Small-scale differences**: Full ray-tracing shows ~5-30% less power at small scales (high ℓ > 200)
-- **Physical interpretation**: Differences arise from lens-lens coupling effects not captured by Born approximation
-
 ## Quick Start
 
 ### 1. Setup Environment
@@ -68,23 +61,6 @@ python run_dorian_full.py
 
 # View results in Jupyter notebook
 jupyter notebook notebooks/analysis.ipynb
-```
-
-## Project Structure
-
-```
-RayTracingTests/
-├── README.md                    # This file
-├── requirements.txt             # Python dependencies
-├── run_dorian_full.py          # Main raytracing script
-├── dorian_raytracing.py        # Core raytracing implementation
-├── power_spectrum_analysis.py  # Power spectrum computation
-├── data/                       # Simulation data (user-provided)
-│   └── sim00001/
-├── experiments/                # Experimental configurations
-│   └── results/               # Generated convergence maps and analysis
-└── notebooks/
-    └── analysis.ipynb         # 📊 **Results Visualization Notebook**
 ```
 
 ## Results Notebook
